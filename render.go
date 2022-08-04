@@ -16,8 +16,6 @@ func GetFrameLengths(rows [][]string) []int {
 				max_elements[j] = len(rows[i][j])
 
 			}
-			temp := max_elements[j]
-			fmt.Println(temp)
 		}
 	}
 	return max_elements
