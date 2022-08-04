@@ -22,21 +22,21 @@ func GetFrameLengths(rows [][]string) []int {
 	}
 	return max_elements
 }
-func Render(writer *bytes.Buffer, file [][]string, rowLimit int) {
+func Render(writer *bytes.Buffer, rows [][]string, rowLimit int) {
 	var frame string
 	// how not to do this in n^2
-	max_elements := GetFrameLengths(file)
+	max_elements := GetFrameLengths(rows)
 	for i := 0; i < rowLimit; i++ {
-		for j := 0; j < len(file[i]); j++ {
+		for j := 0; j < len(rows[i]); j++ {
 			var seperatingChar string
-			if j != len(file[i])-1 {
+			if j != len(rows[i])-1 {
 				seperatingChar = "|"
 			} else {
 				//terminates the line
 				seperatingChar = "|\n"
 			}
-
-			fmt.Fprint(writer, file[i][j]+strings.Repeat(" ", max_elements[j]-len(file[i][j]))+seperatingChar)
+			entry := rows[i][j]
+			fmt.Fprint(writer, entry+strings.Repeat(" ", max_elements[j]-len(entry))+seperatingChar)
 			frame += strings.Repeat("-", max_elements[j])
 			frame += "+"
 		}

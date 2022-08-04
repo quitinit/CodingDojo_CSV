@@ -2,75 +2,11 @@ package main
 
 import (
 	"bufio"
-	"encoding/csv"
-	"errors"
 	"fmt"
-	"io"
-	"log"
 	"os"
-	"strconv"
 	"strings"
 )
 
-type Config struct {
-	Filename string
-	Pagesize int
-}
-
-func parseCommandlineArgs(args []string) (c *Config, err error) {
-	filename := args[0]
-	if _, fileErr := os.Stat(filename); fileErr != nil {
-		return nil, fileErr
-	}
-	pagesize, conversionErr := strconv.Atoi(args[1])
-	if conversionErr != nil {
-		return nil, errors.New("page size needs to be an integer")
-	}
-	if pagesize < 1 {
-		return nil, errors.New("page size needs to be a positive integer")
-	}
-
-	return &Config{Filename: filename, Pagesize: pagesize}, nil
-}
-func ReadFile(path string) [][]string {
-	var result [][]string
-	f, err := os.Open(path)
-
-	if err != nil {
-		log.Fatal(err)
-	}
-
-	defer f.Close()
-
-	scanner := bufio.NewScanner(f)
-	for scanner.Scan() {
-		line := scanner.Text()
-		r := csv.NewReader(strings.NewReader(line))
-
-		for {
-			record, err := r.Read()
-			if err == io.EOF {
-				break
-			}
-			if err != nil {
-				log.Fatal(err)
-			}
-
-			result = append(result, record)
-		}
-
-	}
-
-	if err := scanner.Err(); err != nil {
-		log.Fatal(err)
-	}
-	/* --
-
-
-	 */
-
-	return result
-}
 func main() {
 	/*
 		argument one is the file
@@ -86,7 +22,7 @@ func main() {
 
 	*/
 
-	_, err := parseCommandlineArgs(os.Args[1:])
+	_, err := ParseCommandlineArgs(os.Args[1:])
 
 	if err != nil {
 		//TODO have some logging in here
