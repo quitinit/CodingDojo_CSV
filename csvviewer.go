@@ -7,6 +7,14 @@ import (
 	"strings"
 )
 
+func GetData(sample_data [][]string, start int, end int) [][]string {
+	//return_data := make([][]string, 0)
+	if len(sample_data) < end {
+		return sample_data
+	}
+	return sample_data[start:end]
+
+}
 func main() {
 	/*
 		argument one is the file
