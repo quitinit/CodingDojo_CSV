@@ -57,7 +57,7 @@ func main() {
 	// transform the data so it only shows the
 	input := bufio.NewScanner(os.Stdin)
 	page := 1
-	maxPage := len(content) - 1/config.Pagesize
+	maxPage := (len(content) - 1) / config.Pagesize
 	header, currentContent := GetData(content, page, config.Pagesize)
 
 	Render(os.Stdout, header, currentContent)
