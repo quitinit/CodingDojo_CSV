@@ -21,7 +21,9 @@ func ParseCommandlineArgs(args []string) (c *Config, err error) {
 	if _, fileErr := os.Stat(filename); fileErr != nil {
 		return nil, fileErr
 	}
+
 	pagesize, conversionErr := strconv.Atoi(args[1])
+
 	if conversionErr != nil {
 		return nil, errors.New("page size needs to be an integer")
 	}

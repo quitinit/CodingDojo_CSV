@@ -1,8 +1,8 @@
 package main
 
 import (
-	"bytes"
 	"fmt"
+	"io"
 	"strings"
 )
 
@@ -27,21 +27,26 @@ func GetFrameLengths(rows [][]string) []int {
 	}
 	return max_elements
 }
-func Render(writer *bytes.Buffer, rows [][]string) {
+func Render(writer io.Writer, header []string, rows [][]string) {
 	var frame string
+	headerArray := make([][]string, 0)
 	// how not to do this in n^2
-	max_elements := GetFrameLengths(rows)
+	if len(header) != 0 {
+		headerArray = [][]string{header}
+	}
+	full_data := append(headerArray, rows...)
+	max_elements := GetFrameLengths(full_data)
 
-	for i := 0; i < len(rows); i++ {
-		for j := 0; j < len(rows[i]); j++ {
+	for i := 0; i < len(full_data); i++ {
+		for j := 0; j < len(full_data[i]); j++ {
 			var seperatingChar string
-			if j != len(rows[i])-1 {
+			if j != len(full_data[i])-1 {
 				seperatingChar = "|"
 			} else {
 				//terminates the line
 				seperatingChar = "|\n"
 			}
-			entry := rows[i][j]
+			entry := full_data[i][j]
 			fmt.Fprint(writer, entry+strings.Repeat(" ", max_elements[j]-len(entry))+seperatingChar)
 			frame += strings.Repeat("-", max_elements[j])
 			frame += "+"
