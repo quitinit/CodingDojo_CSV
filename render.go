@@ -18,10 +18,8 @@ func GetFrameLengths(rows [][]string) []int {
 	max_elements := make([]int, length)
 	for i := startRows; i < endRows; i++ {
 		for j := 0; j < len(rows[i]); j++ {
-
 			if len(rows[i][j]) > max_elements[j] {
 				max_elements[j] = len(rows[i][j])
-
 			}
 		}
 	}

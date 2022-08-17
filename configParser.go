@@ -3,12 +3,14 @@ package main
 import (
 	"bufio"
 	"encoding/csv"
-	"errors"
+	"flag"
+	"fmt"
 	"io"
 	"log"
 	"os"
-	"strconv"
 	"strings"
+
+	"golang.org/x/term"
 )
 
 type Config struct {
@@ -17,21 +19,34 @@ type Config struct {
 }
 
 func ParseCommandlineArgs(args []string) (c *Config, err error) {
-	filename := args[0]
-	if _, fileErr := os.Stat(filename); fileErr != nil {
+	fmt.Println(args)
+	var pageSize int
+	var fileName string
+	//pagesize, conversionErr := strconv.Atoi(args[1])
+	flag.IntVar(&pageSize, "p", 0, "number of entries on one page")
+	flag.StringVar(&fileName, "f", "", "filename of csv")
+	// if conversionErr != nil {
+	// 	return nil, errors.New("page size needs to be an integer")
+	// }
+	flag.Parse()
+	if _, fileErr := os.Stat(fileName); fileErr != nil {
 		return nil, fileErr
 	}
-
-	pagesize, conversionErr := strconv.Atoi(args[1])
-
-	if conversionErr != nil {
-		return nil, errors.New("page size needs to be an integer")
+	if pageSize == 0 {
+		_, height, err := getTerminalSize()
+		if err != nil {
+			fmt.Println(err)
+			return nil, err
+		}
+		pageSize = height
+		fmt.Println(pageSize)
 	}
-	if pagesize < 1 {
-		return nil, errors.New("page size needs to be a positive integer")
-	}
+	return &Config{Filename: fileName, Pagesize: pageSize}, nil
+}
+func getTerminalSize() (int, int, error) {
+	width, height, err := term.GetSize(int(os.Stdout.Fd()))
+	return width, height, err
 
-	return &Config{Filename: filename, Pagesize: pagesize}, nil
 }
 func ReadFile(path string) [][]string {
 	var result [][]string

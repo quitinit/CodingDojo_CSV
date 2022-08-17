@@ -9,7 +9,11 @@ import (
 func TestParseCommandline(t *testing.T) {
 	t.Run("correct config with page size 3 and relative file", func(t *testing.T) {
 		args := []string{"./sample_files/example.csv", "3"}
-		got, _ := ParseCommandlineArgs(args)
+
+		got, error := ParseCommandlineArgs(args)
+		if error != nil {
+			panic(error)
+		}
 		assert.Equal(t, &Config{"./sample_files/example.csv", 3}, got)
 	})
 	t.Run("parser fails on negative page size", func(t *testing.T) {

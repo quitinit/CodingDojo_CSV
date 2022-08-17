@@ -57,12 +57,16 @@ func main() {
 	// transform the data so it only shows the
 	input := bufio.NewScanner(os.Stdin)
 	page := 1
+
 	maxPage := (len(content) - 1) / config.Pagesize
+	if maxPage == 0 {
+		maxPage = 1
+	}
 	header, currentContent := GetData(content, page, config.Pagesize)
 
 	Render(os.Stdout, header, currentContent)
 	fmt.Println("F)irst page, P)revious page, N)ext page, L)ast page, E)xit")
-
+	fmt.Printf("Page %d of %d\n", page, maxPage)
 	// read in the data
 
 	// render the data
@@ -76,6 +80,7 @@ func main() {
 			page = 1
 			header, currentContent := GetData(content, page, config.Pagesize)
 			Render(os.Stdout, header, currentContent)
+			fmt.Printf("Page %d of %d\n", page, maxPage)
 		case "p":
 			page--
 			if page < 1 {
@@ -83,6 +88,7 @@ func main() {
 			}
 			header, currentContent := GetData(content, page, config.Pagesize)
 			Render(os.Stdout, header, currentContent)
+			fmt.Printf("Page %d of %d\n", page, maxPage)
 		case "n":
 			page++
 			if page > maxPage {
@@ -90,10 +96,12 @@ func main() {
 			}
 			header, currentContent := GetData(content, page, config.Pagesize)
 			Render(os.Stdout, header, currentContent)
+			fmt.Printf("Page %d of %d\n", page, maxPage)
 		case "l":
 			page = maxPage
 			header, currentContent := GetData(content, page, config.Pagesize)
 			Render(os.Stdout, header, currentContent)
+			fmt.Printf("Page %d of %d\n", page, maxPage)
 		}
 
 	}
