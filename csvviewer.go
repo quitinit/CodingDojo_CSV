@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"io"
 	"os"
+	"strconv"
 	"strings"
 )
 
@@ -57,6 +58,7 @@ func main() {
 	content := ReadFile(config.Filename)
 	// transform the data so it only shows the
 	input := bufio.NewScanner(os.Stdin)
+
 	page := 1
 	maxPage := (len(content) - 1) / config.Pagesize
 	writer := os.Stdout
@@ -87,8 +89,20 @@ func main() {
 		case "l":
 			page = maxPage
 
-			//case 'j':
-			//
+		case "j":
+			pageJumpInputScanner := bufio.NewScanner(os.Stdin)
+			pageJumpInputScanner.Scan()
+			jumpPage, err := strconv.Atoi(input.Text())
+			if err != nil {
+				fmt.Fprintf(writer, "Not a page number %v %v", jumpPage, err)
+				break
+			}
+			jumpPage, jumpErr := JumpToPage(jumpPage, maxPage)
+			if jumpErr != nil {
+				fmt.Fprintln(writer, err)
+				break
+			}
+			page = jumpPage
 
 		}
 
