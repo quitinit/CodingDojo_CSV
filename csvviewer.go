@@ -86,6 +86,7 @@ func main() {
 			}
 		case "l":
 			page = maxPage
+
 			//case 'j':
 			//
 
