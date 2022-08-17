@@ -29,3 +29,11 @@ func TestParseCommandline(t *testing.T) {
 	})
 
 }
+
+func TestReadFile(t *testing.T) {
+	t.Run("reads a small file that is correctly laid out seperated by comma", func(t *testing.T) {
+		got := ReadFile("./sample_files/small_file.csv")
+		want := [][]string{{"Name", "Age", "City"}}
+		assert.Equal(t, got, want)
+	})
+}

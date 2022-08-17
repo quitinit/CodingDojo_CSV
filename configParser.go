@@ -1,14 +1,11 @@
 package main
 
 import (
-	"bufio"
 	"encoding/csv"
 	"errors"
-	"io"
 	"log"
 	"os"
 	"strconv"
-	"strings"
 )
 
 type Config struct {
@@ -34,41 +31,15 @@ func ParseCommandlineArgs(args []string) (c *Config, err error) {
 	return &Config{Filename: filename, Pagesize: pagesize}, nil
 }
 func ReadFile(path string) [][]string {
-	var result [][]string
 	f, err := os.Open(path)
-
 	if err != nil {
 		log.Fatal(err)
 	}
-
 	defer f.Close()
-
-	scanner := bufio.NewScanner(f)
-	for scanner.Scan() {
-		line := scanner.Text()
-		r := csv.NewReader(strings.NewReader(line))
-
-		for {
-			record, err := r.Read()
-			if err == io.EOF {
-				break
-			}
-			if err != nil {
-				log.Fatal(err)
-			}
-
-			result = append(result, record)
-		}
-
-	}
-
-	if err := scanner.Err(); err != nil {
+	csvReader := csv.NewReader(f)
+	data, err := csvReader.ReadAll()
+	if err != nil {
 		log.Fatal(err)
 	}
-	/* --
-
-
-	 */
-
-	return result
+	return data
 }
