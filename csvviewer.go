@@ -3,6 +3,7 @@ package main
 import (
 	"bufio"
 	"fmt"
+	"io"
 	"os"
 	"strings"
 )
@@ -58,44 +59,46 @@ func main() {
 	input := bufio.NewScanner(os.Stdin)
 	page := 1
 	maxPage := (len(content) - 1) / config.Pagesize
-	header, currentContent := GetData(content, page, config.Pagesize)
-
-	Render(os.Stdout, header, currentContent)
-	fmt.Println("F)irst page, P)revious page, N)ext page, L)ast page, E)xit")
-
+	writer := os.Stdout
 	// read in the data
 
 	// render the data
 
 	for {
+		CompleteRender(writer, content, page, maxPage, config)
 		input.Scan()
 		switch strings.ToLower(input.Text()) {
 		case "e":
 			os.Exit(0)
 		case "f":
 			page = 1
-			header, currentContent := GetData(content, page, config.Pagesize)
-			Render(os.Stdout, header, currentContent)
+
 		case "p":
 			page--
 			if page < 1 {
 				page = 1
 			}
-			header, currentContent := GetData(content, page, config.Pagesize)
-			Render(os.Stdout, header, currentContent)
+
 		case "n":
 			page++
 			if page > maxPage {
 				page = maxPage
 			}
-			header, currentContent := GetData(content, page, config.Pagesize)
-			Render(os.Stdout, header, currentContent)
 		case "l":
 			page = maxPage
-			header, currentContent := GetData(content, page, config.Pagesize)
-			Render(os.Stdout, header, currentContent)
+			//case 'j':
+			//
+
 		}
 
 	}
+
+}
+
+func CompleteRender(writer io.Writer, content [][]string, page int, maxPage int, config *Config) {
+	header, currentContent := GetData(content, page, config.Pagesize)
+	Render(writer, header, currentContent)
+	fmt.Fprintf(writer, "Page %d/%d\n", page, maxPage)
+	fmt.Fprintln(writer, "F)irst page, P)revious page, N)ext page, L)ast page, J) Jump to Page, E)xit")
 
 }

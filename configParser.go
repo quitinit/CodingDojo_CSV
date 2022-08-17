@@ -27,7 +27,6 @@ func ParseCommandlineArgs(args []string) (c *Config, err error) {
 	if pagesize < 1 {
 		return nil, errors.New("page size needs to be a positive integer")
 	}
-
 	return &Config{Filename: filename, Pagesize: pagesize}, nil
 }
 func ReadFile(path string) [][]string {
