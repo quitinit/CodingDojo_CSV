@@ -135,12 +135,11 @@ func main() {
 				fmt.Fprintf(writer, "Not a page number %v %v", jumpPage, err)
 				break
 			}
-			jumpPage, jumpErr := JumpToPage(jumpPage, state.MaxPage)
-			if jumpErr != nil {
-				fmt.Fprintln(writer, jumpErr)
-				break
+			jumpError := state.setPage(jumpPage)
+			if jumpError != nil {
+				fmt.Fprintln(writer, jumpError.Error())
 			}
-			state.setPage(jumpPage)
+
 			//page = jumpPage
 		}
 
