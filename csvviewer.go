@@ -2,12 +2,57 @@ package main
 
 import (
 	"bufio"
+	"errors"
 	"fmt"
 	"io"
 	"os"
 	"strconv"
 	"strings"
 )
+
+type Command interface {
+	execute()
+}
+type State struct {
+	Page    int
+	MaxPage int
+}
+
+func (state *State) New(maxPage int) {
+	state.Page = 1
+	state.MaxPage = maxPage
+
+}
+func (state *State) reset() {
+	state.Page = 1
+}
+
+func (state *State) upPage() {
+	if state.Page+1 > state.MaxPage {
+		state.Page = state.MaxPage
+	} else {
+		state.Page++
+	}
+
+}
+func (state *State) downPage() {
+	if state.Page < 1 {
+		state.Page = 1
+	} else {
+		state.Page--
+	}
+
+}
+func (state *State) maxPage() {
+	state.Page = state.MaxPage
+}
+func (state *State) setPage(page int) error {
+	if page > state.MaxPage || page < 1 {
+		return errors.New("set beyond page limit")
+	}
+	state.Page = page
+	return nil
+}
 
 func GetData(input_data [][]string, page int, step int) (header []string, data [][]string) {
 	/*
@@ -59,31 +104,28 @@ func main() {
 	// transform the data so it only shows the
 	input := bufio.NewScanner(os.Stdin)
 
-	page := 1
-	maxPage := (len(content) - 1) / config.Pagesize
+	state := State{MaxPage: (len(content) - 1) / config.Pagesize}
+
 	writer := os.Stdout
 	for {
-		CompleteRender(writer, content, page, maxPage, config)
+		CompleteRender(writer, content, state.Page, state.MaxPage, config)
 		input.Scan()
 		switch strings.ToLower(input.Text()) {
+		// inputs a letter -> does something in between -> outputs a page and perhaps renders something more to the screen
+
 		case "e":
 			os.Exit(0)
 		case "f":
-			page = 1
+			state.reset()
 
 		case "p":
-			page--
-			if page < 1 {
-				page = 1
-			}
+			state.downPage()
 
 		case "n":
-			page++
-			if page > maxPage {
-				page = maxPage
-			}
+			state.upPage()
+
 		case "l":
-			page = maxPage
+			state.maxPage()
 
 		case "j":
 			fmt.Fprintln(writer, "Page Number:")
@@ -93,12 +135,13 @@ func main() {
 				fmt.Fprintf(writer, "Not a page number %v %v", jumpPage, err)
 				break
 			}
-			jumpPage, jumpErr := JumpToPage(jumpPage, maxPage)
+			jumpPage, jumpErr := JumpToPage(jumpPage, state.MaxPage)
 			if jumpErr != nil {
 				fmt.Fprintln(writer, jumpErr)
 				break
 			}
-			page = jumpPage
+			state.setPage(jumpPage)
+			//page = jumpPage
 		}
 
 	}
