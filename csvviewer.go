@@ -62,10 +62,6 @@ func main() {
 	page := 1
 	maxPage := (len(content) - 1) / config.Pagesize
 	writer := os.Stdout
-	// read in the data
-
-	// render the data
-
 	for {
 		CompleteRender(writer, content, page, maxPage, config)
 		input.Scan()
@@ -90,8 +86,8 @@ func main() {
 			page = maxPage
 
 		case "j":
-			pageJumpInputScanner := bufio.NewScanner(os.Stdin)
-			pageJumpInputScanner.Scan()
+			fmt.Fprintln(writer, "Page Number:")
+			input.Scan()
 			jumpPage, err := strconv.Atoi(input.Text())
 			if err != nil {
 				fmt.Fprintf(writer, "Not a page number %v %v", jumpPage, err)
@@ -99,11 +95,10 @@ func main() {
 			}
 			jumpPage, jumpErr := JumpToPage(jumpPage, maxPage)
 			if jumpErr != nil {
-				fmt.Fprintln(writer, err)
+				fmt.Fprintln(writer, jumpErr)
 				break
 			}
 			page = jumpPage
-
 		}
 
 	}
