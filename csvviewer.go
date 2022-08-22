@@ -18,10 +18,11 @@ type State struct {
 	MaxPage int
 }
 
-func (state *State) New(maxPage int) {
+func NewState(maxPage int) *State {
+	state := State{}
 	state.Page = 1
 	state.MaxPage = maxPage
-
+	return &state
 }
 func (state *State) reset() {
 	state.Page = 1
@@ -104,7 +105,7 @@ func main() {
 	// transform the data so it only shows the
 	input := bufio.NewScanner(os.Stdin)
 
-	state := State{MaxPage: (len(content) - 1) / config.Pagesize}
+	state := NewState((len(content) - 1) / config.Pagesize)
 
 	writer := os.Stdout
 	for {
