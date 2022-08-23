@@ -27,9 +27,11 @@ func GetFrameLengths(rows [][]string) []int {
 	}
 	return max_elements
 }
-func Render(writer io.Writer, header []string, rows [][]string) {
+func Render(writer io.Writer, data *Data) {
 	var frame string
 	headerArray := make([][]string, 0)
+	header := data.header
+	rows := data.body
 	// how not to do this in n^2
 	if len(header) != 0 {
 		headerArray = [][]string{header}

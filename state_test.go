@@ -6,7 +6,7 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
-func TestJumpToPage(t *testing.T) {
+func TestState(t *testing.T) {
 	t.Run("State inti", func(t *testing.T) {
 		//var maxPage int = 2
 		state := NewState(2)

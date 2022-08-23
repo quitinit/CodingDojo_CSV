@@ -55,30 +55,6 @@ func (state *State) setPage(page int) error {
 	return nil
 }
 
-func GetData(input_data [][]string, page int, step int) (header []string, data [][]string) {
-	/*
-		This function takes the entire dataset and returns a sliced up part for the render
-
-	*/
-	// it makes no sense the way I do it here, I should have a page devider function
-
-	if len(input_data) == 0 {
-		return nil, nil
-	}
-
-	if len(input_data) == 1 {
-		return input_data[0], nil
-	}
-	lower_limit := (page-1)*step + 1
-	upper_limit := page * step
-	if upper_limit > len(input_data)-1 {
-		upper_limit = len(input_data) - 1
-	}
-	header, rest := input_data[0], input_data[lower_limit:upper_limit+1]
-	return header, rest
-
-}
-
 func main() {
 	/*
 		argument one is the file
@@ -109,7 +85,8 @@ func main() {
 
 	writer := os.Stdout
 	for {
-		CompleteRender(writer, content, state.Page, state.MaxPage, config)
+		data := GetData(content, state.Page, config.Pagesize)
+		CompleteRender(writer, content, state.Page, state.MaxPage, data)
 		input.Scan()
 		switch strings.ToLower(input.Text()) {
 		// inputs a letter -> does something in between -> outputs a page and perhaps renders something more to the screen
@@ -127,6 +104,7 @@ func main() {
 
 		case "l":
 			state.maxPage()
+		case "s":
 
 		case "j":
 			fmt.Fprintln(writer, "Page Number:")
@@ -148,10 +126,10 @@ func main() {
 
 }
 
-func CompleteRender(writer io.Writer, content [][]string, page int, maxPage int, config *Config) {
-	header, currentContent := GetData(content, page, config.Pagesize)
-	Render(writer, header, currentContent)
+func CompleteRender(writer io.Writer, content [][]string, page int, maxPage int, data *Data) {
+
+	Render(writer, data)
 	fmt.Fprintf(writer, "Page %d/%d\n", page, maxPage)
-	fmt.Fprintln(writer, "F)irst page, P)revious page, N)ext page, L)ast page, J) Jump to Page, E)xit")
+	fmt.Fprintln(writer, "F)irst page, P)revious page, N)ext page, L)ast page, J) Jump to Page, S) Sort, E)xit")
 
 }
