@@ -5,6 +5,18 @@ type Data struct {
 	body   [][]string
 }
 
+func (d *Data) Sort(header string) {
+	// find the index of the header
+	// var index int
+	// for i, element := range d.header {
+	// 	if header == element {
+	// 		index = i
+	// 		break
+	// 	}
+	// }
+
+}
+
 func GetData(input_data [][]string, page int, step int) *Data {
 	/*
 		This function takes the entire dataset and returns a sliced up part for the render

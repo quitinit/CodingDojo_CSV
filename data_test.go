@@ -42,3 +42,13 @@ func TestGetData(t *testing.T) {
 	})
 
 }
+
+func TestSort(t *testing.T) {
+	rows := [][]string{{"Name", "Age", "City"}, {"Peter", "42", "New York"}, {"Michael", "26", "Berlin"}}
+	data := GetData(rows, 2, 2)
+
+	t.Run("sorting alphabetically with a cortrectly given header name", func(t *testing.T) {
+		data.Sort("City")
+		assert.Equal(t, [][]string{{"Michael", "26", "Berlin"}, {"Peter", "42", "New York"}}, data.body)
+	})
+}
