@@ -1,19 +1,21 @@
 package main
 
+import "sort"
+
 type Data struct {
 	header []string
 	body   [][]string
 }
 
-func (d *Data) Sort(header string) {
-	// find the index of the header
-	// var index int
-	// for i, element := range d.header {
-	// 	if header == element {
-	// 		index = i
-	// 		break
-	// 	}
-	// }
+func (data *Data) Sort(header string) {
+	// array of length data.body
+	index := sort.StringSlice(data.header).Search(header)
+
+	// get data for the header
+	sort.SliceStable(data.body, func(i, j int) bool { return data.body[i][index] < data.body[j][index] })
+	/* 	sort.SliceStable(data.body, func(i, j int) bool {
+		return data.body[i][index] < data.body[j][index]
+	}) */
 
 }
 
