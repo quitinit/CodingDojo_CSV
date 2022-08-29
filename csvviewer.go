@@ -86,7 +86,7 @@ func main() {
 	writer := os.Stdout
 	for {
 		data := GetData(content, state.Page, config.Pagesize)
-		CompleteRender(writer, content, state.Page, state.MaxPage, data)
+		CompleteRender(writer, content, state.Page, state.MaxPage, &data)
 		input.Scan()
 		switch strings.ToLower(input.Text()) {
 		// inputs a letter -> does something in between -> outputs a page and perhaps renders something more to the screen

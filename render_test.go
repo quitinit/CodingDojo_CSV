@@ -13,7 +13,7 @@ func CheckRender(t *testing.T, sample_data [][]string, start int, limit int, exp
 	writer := bytes.Buffer{}
 	// the render function takes csv da
 	data := GetData(sample_data, start, limit)
-	Render(&writer, data)
+	Render(&writer, &data)
 	expected = strings.TrimLeft(expected, "\n")
 	expected = strings.TrimLeft(expected, "\t")
 	got := writer.String()
