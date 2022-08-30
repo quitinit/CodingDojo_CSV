@@ -7,6 +7,15 @@ import (
 )
 
 func TestGetData(t *testing.T) {
+	/* t.Run("rows gets passed by reference and not by value", func(t *testing.T) {
+		rows := [][]string{{"Name", "Age", "City"}, {"Peter", "42", "New York"}}
+		data := GetData(rows, 1, 1)
+		data.body = append(data.body, []string{"some", "other", "name"})
+		if &rows != &data.body {
+			t.Errorf("%v expected but got %v", [][]string{{"Peter", "42", "New York"}}, data.body)
+		}
+	}) */
+
 	t.Run("pass in and get the whole thing out", func(t *testing.T) {
 		rows := [][]string{{"Name", "Age", "City"}, {"Peter", "42", "New York"}}
 		data := GetData(rows, 1, 1)

@@ -28,18 +28,19 @@ func GetData(input_data [][]string, page int, step int) Data {
 		This function takes the entire dataset and returns a sliced up part for the render
 
 	*/
-
-	if len(input_data) == 0 {
+	copy_data := make([][]string, len(input_data))
+	copy(copy_data, input_data)
+	if len(copy_data) == 0 {
 		return Data{}
 	}
-	if len(input_data) == 1 {
-		return Data{header: input_data[0]}
+	if len(copy_data) == 1 {
+		return Data{header: copy_data[0]}
 	}
 	lower_limit := (page-1)*step + 1
 	upper_limit := page * step
-	if upper_limit > len(input_data)-1 {
-		upper_limit = len(input_data) - 1
+	if upper_limit > len(copy_data)-1 {
+		upper_limit = len(copy_data) - 1
 	}
-	return Data{header: input_data[0], body: input_data[lower_limit : upper_limit+1]}
+	return Data{header: copy_data[0], body: copy_data[lower_limit : upper_limit+1]}
 
 }
