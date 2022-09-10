@@ -1,9 +1,7 @@
 package main
 
 import (
-	"encoding/csv"
 	"errors"
-	"log"
 	"os"
 	"strconv"
 )
@@ -28,17 +26,4 @@ func ParseCommandlineArgs(args []string) (c *Config, err error) {
 		return nil, errors.New("page size needs to be a positive integer")
 	}
 	return &Config{Filename: filename, Pagesize: pagesize}, nil
-}
-func ReadFile(path string) [][]string {
-	f, err := os.Open(path)
-	if err != nil {
-		log.Fatal(err)
-	}
-	defer f.Close()
-	csvReader := csv.NewReader(f)
-	data, err := csvReader.ReadAll()
-	if err != nil {
-		log.Fatal(err)
-	}
-	return data
 }

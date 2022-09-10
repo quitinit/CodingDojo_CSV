@@ -1,7 +1,10 @@
 package main
 
 import (
+	"encoding/csv"
 	"errors"
+	"log"
+	"os"
 	"sort"
 )
 
@@ -49,4 +52,17 @@ func (data Data) SliceData(page int, step int) Data {
 		upper_limit = len(data.body)
 	}
 	return Data{header: data.header, body: data.body[lower_limit:upper_limit]}
+}
+func ReadFile(path string) [][]string {
+	f, err := os.Open(path)
+	if err != nil {
+		log.Fatal(err)
+	}
+	defer f.Close()
+	csvReader := csv.NewReader(f)
+	data, err := csvReader.ReadAll()
+	if err != nil {
+		log.Fatal(err)
+	}
+	return data
 }

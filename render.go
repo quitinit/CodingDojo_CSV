@@ -27,7 +27,11 @@ func GetFrameLengths(rows [][]string) []int {
 	}
 	return max_elements
 }
-func Render(writer io.Writer, data *Data) {
+func RenderPage(writer io.Writer, state *State) {
+	fmt.Fprintf(writer, "Page %d/%d\n", state.Page, state.MaxPage)
+	fmt.Fprintln(writer, "F)irst page, P)revious page, N)ext page, L)ast page, J) Jump to Page, S) Sort, E)xit")
+}
+func RenderData(writer io.Writer, data *Data) {
 	var frame string
 	headerArray := make([][]string, 0)
 	header := data.header
@@ -59,4 +63,9 @@ func Render(writer io.Writer, data *Data) {
 
 	}
 
+}
+
+func Render(writer io.Writer, state *State, data *Data) {
+	RenderData(writer, data)
+	RenderPage(writer, state)
 }

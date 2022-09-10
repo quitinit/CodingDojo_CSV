@@ -4,7 +4,6 @@ import (
 	"bufio"
 	"errors"
 	"fmt"
-	"io"
 	"os"
 	"strconv"
 	"strings"
@@ -39,7 +38,7 @@ func (state *State) upPage() {
 
 }
 func (state *State) downPage() {
-	if state.Page < 1 {
+	if state.Page <= 1 {
 		state.Page = 1
 	} else {
 		state.Page--
@@ -80,6 +79,7 @@ func main() {
 	}
 	// I do this so that the file is already in memory and does not need to be loaded from disc again
 	content := ReadFile(config.Filename)
+
 	// transform the data so it only shows the
 	input := bufio.NewScanner(os.Stdin)
 
@@ -88,11 +88,12 @@ func main() {
 	writer := os.Stdout
 
 	//data := GetData(content, state.Page, config.Pagesize)
+
 	input_data := NewData(content)
 
 	for {
 		data := input_data.SliceData(state.Page, config.Pagesize)
-		CompleteRender(writer, content, state.Page, state.MaxPage, &data)
+		Render(writer, state, &data)
 		input.Scan()
 		switch strings.ToLower(input.Text()) {
 		// inputs a letter -> does something in between -> outputs a page and perhaps renders something more to the screen
@@ -132,13 +133,5 @@ func main() {
 		}
 
 	}
-
-}
-
-func CompleteRender(writer io.Writer, content [][]string, page int, maxPage int, data *Data) {
-
-	Render(writer, data)
-	fmt.Fprintf(writer, "Page %d/%d\n", page, maxPage)
-	fmt.Fprintln(writer, "F)irst page, P)revious page, N)ext page, L)ast page, J) Jump to Page, S) Sort, E)xit")
 
 }
