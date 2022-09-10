@@ -18,12 +18,14 @@ type State struct {
 	MaxPage int
 }
 
+// builder constructor
 func NewState(maxPage int) *State {
 	state := State{}
 	state.Page = 1
 	state.MaxPage = maxPage
 	return &state
 }
+
 func (state *State) reset() {
 	state.Page = 1
 }
@@ -84,8 +86,12 @@ func main() {
 	state := NewState((len(content) - 1) / config.Pagesize)
 
 	writer := os.Stdout
+
+	//data := GetData(content, state.Page, config.Pagesize)
+	input_data := NewData(content)
+
 	for {
-		data := GetData(content, state.Page, config.Pagesize)
+		data := input_data.SliceData(state.Page, config.Pagesize)
 		CompleteRender(writer, content, state.Page, state.MaxPage, &data)
 		input.Scan()
 		switch strings.ToLower(input.Text()) {
@@ -105,7 +111,10 @@ func main() {
 		case "l":
 			state.maxPage()
 		case "s":
-
+			fmt.Fprintln(writer, "Column name:")
+			input.Scan()
+			column_name := input.Text()
+			input_data.Sort(column_name)
 		case "j":
 			fmt.Fprintln(writer, "Page Number:")
 			input.Scan()
