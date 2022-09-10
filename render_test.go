@@ -15,7 +15,7 @@ func CheckRender(t *testing.T, sample_data [][]string, start int, limit int, exp
 	input_data := NewData(sample_data)
 
 	data := input_data.SliceData(start, limit)
-	Render(&writer, &data)
+	RenderData(&writer, &data)
 	expected = strings.TrimLeft(expected, "\n")
 	expected = strings.TrimLeft(expected, "\t")
 	got := writer.String()
