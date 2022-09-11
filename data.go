@@ -61,8 +61,15 @@ func ReadFile(path string) [][]string {
 	defer f.Close()
 	csvReader := csv.NewReader(f)
 	data, err := csvReader.ReadAll()
+
 	if err != nil {
 		log.Fatal(err)
 	}
 	return data
+}
+
+func ReadMultiThreded(path string, done chan [][]string, quit chan error, stepping int) {
+	//csvReader := csv.NewReader(f)
+	//var err error
+
 }

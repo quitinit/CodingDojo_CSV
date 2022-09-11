@@ -60,7 +60,6 @@ func RenderData(writer io.Writer, data *Data) {
 		if i == 0 {
 			fmt.Fprintln(writer, frame)
 		}
-
 	}
 
 }
